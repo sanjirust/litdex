@@ -1,47 +1,48 @@
-# NFTs
+# NFTs — Genesis Champions
 
-LitDEX has a 3-tier Genesis NFT collection. Each tier costs points to mint and pays a daily yield in zkLTC, USDC, and LDEX as long as you hold it.
+LitDEX Genesis Champions is a collection of 1,000 evolving membership passes on **Base Mainnet**. Every pass starts as **Common** and can be leveled up and, eventually, promoted into rarer tiers through on-chain gameplay.
 
-## Why hold?
+This replaces the old LiteForge-testnet "3-tier daily yield" NFT design — Genesis Champions is the live collection and the only one you can mint today.
 
-- **Daily passive yield** in three tokens.
-- **Faucet eligibility** - holding any LitDEX NFT is half of the faucet's eligibility check.
-- **Status** - the NFT shows on your profile and global feed posts.
-- **Future utility** - leaderboard multipliers, governance weight, and exclusive drops are planned.
+## Why hold one?
 
-## The tiers
+- **Progression** — spend LD Points to level your pass up, tier by tier.
+- **Holder utility** — Rare and above get priority access to partnerships and giveaways; Epic and Legend also share in a future $LITDEX airdrop and a weekly cut of protocol repair-fee revenue.
+- **Provable ownership** — every mint, level-up, and transfer is on-chain and visible on [OpenSea](https://opensea.io/collection/litdex) and Basescan.
+- **Bridges your LitVM history** — if you held the original testnet LitShard / LitCore / LitGod NFTs, that's your whitelist discount on Base.
 
-| Tier | Cost | Max supply | Daily reward |
-| --- | --- | --- | --- |
-| LitShard (Common) | 1,000 pts | 9,999 | 0.0001 zkLTC + 10 USDC + 2 LDEX |
-| LitCore (Rare) | 5,000 pts | 4,999 | 0.0005 zkLTC + 50 USDC + 10 LDEX |
-| LitGod (Legendary) | 10,000 pts | 999 | 0.005 zkLTC + 500 USDC + 100 LDEX |
+## Rarities and tiers
 
-LitGod is intentionally scarce - only ~1,000 will ever exist.
+| Rarity | Tiers | How you get one |
+| --- | --- | --- |
+| Common | 1 – 9 | Mint (whitelist or public) |
+| Rare | 1 – 5 | Promotion from Common Tier 9 *(not open yet — see below)* |
+| Epic | 1 – 3 | Promotion from Rare Tier 5 |
+| Legend | single max tier | Promotion from Epic Tier 3 |
 
 ## How to mint
 
-1. Save up the points cost on the [Points page](/points/).
-2. Open the **NFTs** page.
-3. Click **Mint** under the tier you can afford.
-4. Sign the transaction. The NFT lands in your wallet, points are deducted.
+Minting happens only on the main LitDEX site now, not on a separate NFT site.
 
-## How to claim daily yield
+1. Go to **[litdex.test-hub.xyz/nfts](https://litdex.test-hub.xyz/nfts)**.
+2. Connect your wallet using the header connect button — the Champions section uses that same connection, there's no second "connect wallet" step.
+3. If your wallet isn't already on Base Mainnet, a **Switch to Base** prompt appears.
+4. If you held a LitShard/LitCore/LitGod testnet NFT, your whitelist discount shows automatically. Otherwise mint in the public stage at $2 USDC (limit 2 per wallet).
 
-Once you own an NFT:
+## How leveling up works
 
-1. Open the **NFTs** page.
-2. Click **Claim Daily Rewards** (or per-tier claim if you hold multiple tiers).
-3. Sign. The yield since your last claim transfers to your wallet.
+Leveling up spends **LD Points**, not USDC:
 
-The contract tracks `lastClaimDay` per (user, nftType). You can claim once per day per tier. Skipping days is fine - the yield does not compound, it just lands as a single payout for whatever days have passed since your last claim.
+1. Open the **My Points** tab in the Champions section.
+2. Claim any LD Points you've earned on the LitVM testnet onto Base (see [How Points Work](/points/)).
+3. Open the **Levels** tab, pick a Champion, and level it up. The cost is shown before you confirm.
 
-## Multiple of the same tier
+Level costs increase as you climb: **500 LD** for Tier 1→2, **+200 more per level** after that (700, 900, 1100, 1300, 1500, 1700, 1900 for Tiers 3 through 9). See [Mint & Claim](/nfts/mint-claim) for the exact schedule and [Tiers & Rewards](/nfts/tiers) for the full breakdown.
 
-If you mint 3 LitShards, your daily yield is 3× the LitShard rate. The dApp reads `getUserNFTs(address)` and sums.
+## Promotion — not live yet
 
-## See your NFTs
+Moving a pass from Common Tier 9 into Rare (and Rare→Epic, Epic→Legend) requires on-chain gameplay, which hasn't shipped. Promotion is intentionally disabled until then, so **Common Tier 9 is the current ceiling** no matter how many points you spend. This is enforced on-chain, not just in the UI.
 
-The NFTs page → **Your NFTs** section shows every NFT you own grouped by tier with the next claim time and the pending reward.
+## See your Champions
 
-> The fastest path to faucet eligibility is mint **one LitShard (1,000 pts)**. That gates the faucet plus starts daily yield.
+The **Champions** tab shows every pass you own. Click a card's menu to jump straight to **Levels** for that pass, or open **View on OpenSea** to see it in the marketplace.

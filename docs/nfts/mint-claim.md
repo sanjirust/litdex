@@ -1,53 +1,43 @@
 # Mint & Claim
 
-The two operations on the NFTs page.
+Everything below happens at **[litdex.test-hub.xyz/nfts](https://litdex.test-hub.xyz/nfts)** — the standalone nft.test-hub.xyz site no longer mints, it just links here.
 
 ## Mint
 
-1. Open **NFTs**.
-2. Pick a tier you can afford.
-3. Click **Mint LitShard** (or LitCore / LitGod).
-4. Sign. The contract:
-   - deducts the points cost from your `PointsSystem` total,
-   - mints one NFT to your wallet,
-   - emits a `Mint` event.
-
-The new NFT appears in **Your NFTs** instantly.
+1. Connect your wallet from the LitDEX header (no separate connect step inside the NFT section).
+2. If you're not on Base Mainnet, tap **Switch to Base**.
+3. **Whitelist stage** (if eligible): you'll see your available discounted mints — 20% off per LitShard held, 30% off per LitCore, 50% off per LitGod. Pick quantities and mint in one transaction.
+4. **Public stage** (opens after whitelist): mint at $2 USDC, limit 2 per wallet.
+5. On success you'll see a themed confirmation with your token ID and a direct link to trade it on OpenSea.
 
 ### Mint failures
 
 | Cause | What it means |
 | --- | --- |
-| `Insufficient points` | Your `total` points are below the tier cost. Earn more before retrying. |
-| `Max supply reached` | The tier is sold out. Try a different tier. |
-| `User rejected` | You declined the wallet popup. |
+| "play more games first" | Trying to promote a pass — see [Promotion](/nfts/#promotion-not-live-yet), it's disabled until gameplay ships. |
+| Wallet on wrong network | Use the **Switch to Base** prompt before minting. |
+| Limit reached | Public mint is capped at 2 per wallet. |
+| User rejected | You declined the wallet popup. |
 
-## Claim
+## Claim (LD Points → Base)
 
-1. Open **NFTs**.
-2. Scroll to **Your NFTs**.
-3. Click **Claim All** or per-tier **Claim**.
-4. Sign. The contract pays the accumulated zkLTC + USDC + LDEX since your last claim per held NFT.
+Leveling up a Champion costs **LD Points**, spent on Base. Those points are earned on the LitVM testnet and have to be claimed across to Base first:
 
-The success card lists each token + amount.
+1. Open the **My Points** tab.
+2. Enter an amount (or **Max**) and hit **Claim**.
+3. Your LD balance on LitVM burns first, then a themed success card confirms the points landed on Base — usually within about 30 seconds.
+4. Claimed points now count toward leveling up your Champions.
 
-### Claim cooldown
+You can't claim more than your current LD balance — if a claim briefly overlaps with a previous one, the amount is checked against your balance at claim time and rejected if it no longer covers it.
 
-Claim is once per day per tier. The contract tracks `lastClaimDay`:
+> The old points system (referred to internally as "V7") is frozen. Every V7 balance was already converted into LD Points at a 10:1 ratio, so LD Points is the only balance that matters going forward.
 
-```solidity
-uint256 today = block.timestamp / 86400;
-require(today > lastClaimDay[user][tier], "Already claimed today");
-```
+## Level up
 
-If you try to claim again on the same day the tx reverts. Skipping days is fine - the next claim pays for all skipped days at once.
+1. Open the **Levels** tab and pick a Champion.
+2. The cost to reach the next tier is shown up front (see the schedule in [Tiers & Rewards](/nfts/tiers)).
+3. Confirm — the transaction spends LD Points you've already claimed onto Base and your Champion's tier updates immediately once it confirms.
 
-### Multi-tier claim
+## Repair
 
-If you hold multiple tiers, you can call **Claim All** which loops through and claims each in one tx. Saves gas vs three separate claims.
-
-## Pending rewards display
-
-The card shows "Pending: X zkLTC + Y USDC + Z LDEX" computed live from `getPendingRewards(user)`. This number grows every block until you claim.
-
-> Claim every 1–2 days to keep gas overhead low. Claiming every block is wasteful.
+If a pass is ever marked damaged (from a lost gameplay challenge, once gameplay ships), it needs repairing before it can level up again or enter another challenge. Repair costs a flat USDC fee plus points, the same across every rarity and tier.

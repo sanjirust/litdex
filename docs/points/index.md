@@ -26,9 +26,11 @@ Every meaningful interaction earns points:
 
 Points convert to:
 
-- **NFT mints** - see [NFTs → Tiers](/nfts/tiers). LitShard costs 1,000 pts.
+- **Leveling up your Genesis Champions NFT** on Base — see [NFTs → Tiers](/nfts/tiers) for the exact cost per level (500 LD for the first level, +200 per level after that). This is done through **LD Points**, the current points system — see the note below.
 - **zkLTC** (when game-side conversion is open) at a fixed rate.
 - **Leaderboard prizes** - top 20 users get a weekly zkLTC bonus payout.
+
+> **LD Points vs. the points described below.** This page's earning table describes the original "V7" points contract. V7 earning is switched off — it's frozen, not removed — and every V7 balance was already converted into **LD Points** at a 10:1 ratio. LD Points is what you actually spend to level up an NFT today, and it carries its own daily cap (25 LD/day, with multipliers for higher-tier NFT holders). The exact per-action LD earning rates aren't finalized in this doc yet; check the in-app Points dashboard for your current LD total and today's cap.
 
 ## Where points live
 

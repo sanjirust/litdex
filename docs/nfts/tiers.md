@@ -1,62 +1,46 @@
 # Tiers & Rewards
 
-Detailed look at each Genesis tier, who they're for, and how the math plays out long-term.
+How Genesis Champions progress, what each level costs, and what holders get at each rarity.
 
-## LitShard (Common)
+## Rarities
 
-| Field | Value |
-| --- | --- |
-| Mint cost | 1,000 pts |
-| Max supply | 9,999 |
-| Daily zkLTC | 0.0001 |
-| Daily USDC | 10 |
-| Daily LDEX | 2 |
-
-**Recommended for**: every active user. The bar is low (1k points = 1–2 weeks of casual play) and it unlocks the faucet.
-
-**Long-term math** (over 30 days): ~0.003 zkLTC, 300 USDC, 60 LDEX per shard.
-
-## LitCore (Rare)
-
-| Field | Value |
-| --- | --- |
-| Mint cost | 5,000 pts |
-| Max supply | 4,999 |
-| Daily zkLTC | 0.0005 |
-| Daily USDC | 50 |
-| Daily LDEX | 10 |
-
-**Recommended for**: power users grinding the leaderboard. Roughly 5x the LitShard yield for 5x the cost.
-
-**Long-term math** (30 days): ~0.015 zkLTC, 1,500 USDC, 300 LDEX per core.
-
-## LitGod (Legendary)
-
-| Field | Value |
-| --- | --- |
-| Mint cost | 10,000 pts |
-| Max supply | 999 |
-| Daily zkLTC | 0.005 |
-| Daily USDC | 500 |
-| Daily LDEX | 100 |
-
-**Recommended for**: collectors and OG users. Only 999 will ever mint. Highest scarcity, highest yield.
-
-**Long-term math** (30 days): ~0.15 zkLTC, 15,000 USDC, 3,000 LDEX per god.
-
-## Comparison
-
-| Metric | LitShard | LitCore | LitGod |
+| Rarity | Tiers | Supply cap | Community-available |
 | --- | --- | --- | --- |
-| Cost ÷ daily zkLTC | 10M pts | 10M pts | 5M pts |
-| Cost ÷ daily USDC | 100 pts | 100 pts | 50 pts |
-| Cost ÷ daily LDEX | 500 pts | 500 pts | 250 pts |
-| Scarcity | 9,999 | 4,999 | 999 |
+| Common | 1 – 9 | 900 | 800 (100 minted to the team at Tier 9) |
+| Rare | 1 – 5 | 460 | via promotion only (60 minted to the team) |
+| Epic | 1 – 3 | 190 | via promotion only (30 minted to the team) |
+| Legend | single max tier | 50 | via promotion only (10 minted to the team) |
 
-LitGod is the most efficient yield-per-point but the hardest to acquire because of the 10,000 pts cost.
+Every community pass starts at **Common Tier 1**.
+
+## Leveling costs (Common track)
+
+Leveling spends **LD Points**, claimed onto Base from your LitVM balance. The cost rises by a flat 200 points each level:
+
+| Level-up | Cost |
+| --- | --- |
+| Tier 1 → 2 | 500 LD |
+| Tier 2 → 3 | 700 LD |
+| Tier 3 → 4 | 900 LD |
+| Tier 4 → 5 | 1,100 LD |
+| Tier 5 → 6 | 1,300 LD |
+| Tier 6 → 7 | 1,500 LD |
+| Tier 7 → 8 | 1,700 LD |
+| Tier 8 → 9 | 1,900 LD |
+
+Reaching Tier 9 is the current ceiling — promotion into Rare requires on-chain gameplay, which hasn't launched yet.
+
+## Holder utility by rarity
+
+| Rarity | Utility |
+| --- | --- |
+| Common | Base membership pass; eligible to level up |
+| Rare | + priority access to partnerships and community giveaways |
+| Epic | + future $LITDEX airdrop allocation, + 10% weekly share of protocol repair-fee revenue (split among Epic holders) |
+| Legend | + larger airdrop allocation, + 20% weekly share of protocol repair-fee revenue (split among a maximum of 50 Legend holders) |
 
 ## Mint progress
 
-The NFTs page shows live mint progress per tier (`current / max`). LitGods are expected to sell out first.
+The mint page shows live progress (`minted / 1,000`) on Base Mainnet, read directly from the contract.
 
-> Plan your mint. Saving 10,000 points takes weeks of consistent activity. Many users mint a LitShard early to unlock the faucet, then stack pts toward a LitCore or LitGod.
+> Promotion mechanics (Rare/Epic/Legend via gameplay) are covered in full in the [Whitepaper](/../whitepaper) once gameplay ships.

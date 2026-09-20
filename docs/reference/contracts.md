@@ -1,6 +1,32 @@
 # Contracts
 
-All LitDEX contracts on the LiteForge chain (4441). Verified on the [explorer](https://liteforge.explorer.caldera.xyz).
+## Genesis Champions (Base Mainnet)
+
+The live NFT collection. Both contracts are UUPS proxies, independently verified on Basescan and Sourcify.
+
+| Contract | Address |
+| --- | --- |
+| `LitdexNFT` (main collection) | `0xaCA7EFFcd0c4689D131C8d18C09ea1994F2A5d4d` |
+| `BasePoints` (points/claim on Base) | `0xDa73c4c7fcA2E688A77b04137d56740085c2B8E7` |
+| Payment token (native USDC on Base) | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
+
+| Field | Value |
+| --- | --- |
+| Chain | Base Mainnet |
+| Chain ID | 8453 |
+| Standard | ERC-721 |
+
+### LD Points (LitVM)
+
+| Contract | Address |
+| --- | --- |
+| `LDPoints` (UUPS proxy) | `0x26974eF1090b0cd9719B755aEc3d75a5DdD34e01` |
+
+LD Points is the current, active points system on LitVM. It replaces the earlier "V7" points contract below, which is now frozen — every V7 balance was already converted into LD Points at a 10:1 ratio.
+
+## LiteForge testnet (legacy)
+
+All contracts below are on the LiteForge chain (4441), verified on the [explorer](https://liteforge.explorer.caldera.xyz). `PointsSystem` (V7) is frozen — see LD Points above for the current system.
 
 ## Core
 

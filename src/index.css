@@ -719,3 +719,28 @@ body.hide-nav .litdex-mobile-hamburger { display: none !important; }
   .nft-action-button { transition: none; }
   .nft-action-button:hover { transform: none; }
 }
+
+/* ---------- In-app docs markdown rendering (/docs) ---------- */
+.docs-markdown { color: var(--color-brand-text-primary); font-size: 0.95rem; line-height: 1.75; }
+.docs-markdown h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 1rem; }
+.docs-markdown h2 { font-size: 1.4rem; font-weight: 700; margin: 2.25rem 0 0.9rem; padding-top: 1.25rem; border-top: 1px solid var(--color-brand-border); }
+.docs-markdown h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+.docs-markdown h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
+.docs-markdown p { margin: 0.9rem 0; color: var(--color-brand-text-muted); }
+.docs-markdown strong { color: var(--color-brand-text-primary); font-weight: 700; }
+.docs-markdown a { color: var(--color-brand-control); text-decoration: underline; text-underline-offset: 2px; }
+.docs-markdown ul, .docs-markdown ol { margin: 0.9rem 0; padding-left: 1.4rem; color: var(--color-brand-text-muted); }
+.docs-markdown ul { list-style: disc; }
+.docs-markdown ol { list-style: decimal; }
+.docs-markdown li { margin: 0.35rem 0; }
+.docs-markdown li::marker { color: var(--color-brand-text-muted); }
+.docs-markdown blockquote { margin: 1.25rem 0; padding: 0.1rem 1.1rem; border-left: 3px solid var(--color-brand-control); background: var(--color-brand-surface-2); border-radius: 0 8px 8px 0; color: var(--color-brand-text-muted); }
+.docs-markdown blockquote p { margin: 0.7rem 0; }
+.docs-markdown code { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 0.85em; background: var(--color-brand-surface-2); border: 1px solid var(--color-brand-border); border-radius: 4px; padding: 0.15em 0.4em; color: var(--color-brand-text-primary); }
+.docs-markdown pre { margin: 1.1rem 0; padding: 1rem 1.1rem; background: var(--color-brand-surface-2); border: 1px solid var(--color-brand-border); border-radius: 8px; overflow-x: auto; }
+.docs-markdown pre code { background: none; border: none; padding: 0; }
+.docs-markdown table { width: 100%; margin: 1.1rem 0; border-collapse: collapse; font-size: 0.88em; display: block; overflow-x: auto; }
+.docs-markdown th, .docs-markdown td { border: 1px solid var(--color-brand-border); padding: 0.55rem 0.8rem; text-align: left; }
+.docs-markdown th { background: var(--color-brand-surface-2); color: var(--color-brand-text-primary); font-weight: 700; white-space: nowrap; }
+.docs-markdown td { color: var(--color-brand-text-muted); }
+.docs-markdown hr { border: none; border-top: 1px solid var(--color-brand-border); margin: 2rem 0; }

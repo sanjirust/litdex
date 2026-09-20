@@ -1,0 +1,1360 @@
+diff --git a/docs/nfts/index.md b/docs/nfts/index.md
+index ea04562..18e344a 100644
+--- a/docs/nfts/index.md
++++ b/docs/nfts/index.md
+@@ -1,47 +1,48 @@
+-# NFTs
++# NFTs — Genesis Champions
+ 
+-LitDEX has a 3-tier Genesis NFT collection. Each tier costs points to mint and pays a daily yield in zkLTC, USDC, and LDEX as long as you hold it.
++LitDEX Genesis Champions is a collection of 1,000 evolving membership passes on **Base Mainnet**. Every pass starts as **Common** and can be leveled up and, eventually, promoted into rarer tiers through on-chain gameplay.
+ 
+-## Why hold?
++This replaces the old LiteForge-testnet "3-tier daily yield" NFT design — Genesis Champions is the live collection and the only one you can mint today.
+ 
+-- **Daily passive yield** in three tokens.
+-- **Faucet eligibility** - holding any LitDEX NFT is half of the faucet's eligibility check.
+-- **Status** - the NFT shows on your profile and global feed posts.
+-- **Future utility** - leaderboard multipliers, governance weight, and exclusive drops are planned.
++## Why hold one?
+ 
+-## The tiers
++- **Progression** — spend LD Points to level your pass up, tier by tier.
++- **Holder utility** — Rare and above get priority access to partnerships and giveaways; Epic and Legend also share in a future $LITDEX airdrop and a weekly cut of protocol repair-fee revenue.
++- **Provable ownership** — every mint, level-up, and transfer is on-chain and visible on [OpenSea](https://opensea.io/collection/litdex) and Basescan.
++- **Bridges your LitVM history** — if you held the original testnet LitShard / LitCore / LitGod NFTs, that's your whitelist discount on Base.
+ 
+-| Tier | Cost | Max supply | Daily reward |
+-| --- | --- | --- | --- |
+-| LitShard (Common) | 1,000 pts | 9,999 | 0.0001 zkLTC + 10 USDC + 2 LDEX |
+-| LitCore (Rare) | 5,000 pts | 4,999 | 0.0005 zkLTC + 50 USDC + 10 LDEX |
+-| LitGod (Legendary) | 10,000 pts | 999 | 0.005 zkLTC + 500 USDC + 100 LDEX |
++## Rarities and tiers
+ 
+-LitGod is intentionally scarce - only ~1,000 will ever exist.
++| Rarity | Tiers | How you get one |
++| --- | --- | --- |
++| Common | 1 – 9 | Mint (whitelist or public) |
++| Rare | 1 – 5 | Promotion from Common Tier 9 *(not open yet — see below)* |
++| Epic | 1 – 3 | Promotion from Rare Tier 5 |
++| Legend | single max tier | Promotion from Epic Tier 3 |
+ 
+ ## How to mint
+ 
+-1. Save up the points cost on the [Points page](/points/).
+-2. Open the **NFTs** page.
+-3. Click **Mint** under the tier you can afford.
+-4. Sign the transaction. The NFT lands in your wallet, points are deducted.
++Minting happens only on the main LitDEX site now, not on a separate NFT site.
+ 
+-## How to claim daily yield
++1. Go to **[litdex.test-hub.xyz/nfts](https://litdex.test-hub.xyz/nfts)**.
++2. Connect your wallet using the header connect button — the Champions section uses that same connection, there's no second "connect wallet" step.
++3. If your wallet isn't already on Base Mainnet, a **Switch to Base** prompt appears.
++4. If you held a LitShard/LitCore/LitGod testnet NFT, your whitelist discount shows automatically. Otherwise mint in the public stage at $2 USDC (limit 2 per wallet).
+ 
+-Once you own an NFT:
++## How leveling up works
+ 
+-1. Open the **NFTs** page.
+-2. Click **Claim Daily Rewards** (or per-tier claim if you hold multiple tiers).
+-3. Sign. The yield since your last claim transfers to your wallet.
++Leveling up spends **LD Points**, not USDC:
+ 
+-The contract tracks `lastClaimDay` per (user, nftType). You can claim once per day per tier. Skipping days is fine - the yield does not compound, it just lands as a single payout for whatever days have passed since your last claim.
++1. Open the **My Points** tab in the Champions section.
++2. Claim any LD Points you've earned on the LitVM testnet onto Base (see [How Points Work](/points/)).
++3. Open the **Levels** tab, pick a Champion, and level it up. The cost is shown before you confirm.
+ 
+-## Multiple of the same tier
++Level costs increase as you climb: **500 LD** for Tier 1→2, **+200 more per level** after that (700, 900, 1100, 1300, 1500, 1700, 1900 for Tiers 3 through 9). See [Mint & Claim](/nfts/mint-claim) for the exact schedule and [Tiers & Rewards](/nfts/tiers) for the full breakdown.
+ 
+-If you mint 3 LitShards, your daily yield is 3× the LitShard rate. The dApp reads `getUserNFTs(address)` and sums.
++## Promotion — not live yet
+ 
+-## See your NFTs
++Moving a pass from Common Tier 9 into Rare (and Rare→Epic, Epic→Legend) requires on-chain gameplay, which hasn't shipped. Promotion is intentionally disabled until then, so **Common Tier 9 is the current ceiling** no matter how many points you spend. This is enforced on-chain, not just in the UI.
+ 
+-The NFTs page → **Your NFTs** section shows every NFT you own grouped by tier with the next claim time and the pending reward.
++## See your Champions
+ 
+-> The fastest path to faucet eligibility is mint **one LitShard (1,000 pts)**. That gates the faucet plus starts daily yield.
++The **Champions** tab shows every pass you own. Click a card's menu to jump straight to **Levels** for that pass, or open **View on OpenSea** to see it in the marketplace.
+diff --git a/docs/nfts/mint-claim.md b/docs/nfts/mint-claim.md
+index 79f0f2c..1c53604 100644
+--- a/docs/nfts/mint-claim.md
++++ b/docs/nfts/mint-claim.md
+@@ -1,53 +1,43 @@
+ # Mint & Claim
+ 
+-The two operations on the NFTs page.
++Everything below happens at **[litdex.test-hub.xyz/nfts](https://litdex.test-hub.xyz/nfts)** — the standalone nft.test-hub.xyz site no longer mints, it just links here.
+ 
+ ## Mint
+ 
+-1. Open **NFTs**.
+-2. Pick a tier you can afford.
+-3. Click **Mint LitShard** (or LitCore / LitGod).
+-4. Sign. The contract:
+-   - deducts the points cost from your `PointsSystem` total,
+-   - mints one NFT to your wallet,
+-   - emits a `Mint` event.
+-
+-The new NFT appears in **Your NFTs** instantly.
++1. Connect your wallet from the LitDEX header (no separate connect step inside the NFT section).
++2. If you're not on Base Mainnet, tap **Switch to Base**.
++3. **Whitelist stage** (if eligible): you'll see your available discounted mints — 20% off per LitShard held, 30% off per LitCore, 50% off per LitGod. Pick quantities and mint in one transaction.
++4. **Public stage** (opens after whitelist): mint at $2 USDC, limit 2 per wallet.
++5. On success you'll see a themed confirmation with your token ID and a direct link to trade it on OpenSea.
+ 
+ ### Mint failures
+ 
+ | Cause | What it means |
+ | --- | --- |
+-| `Insufficient points` | Your `total` points are below the tier cost. Earn more before retrying. |
+-| `Max supply reached` | The tier is sold out. Try a different tier. |
+-| `User rejected` | You declined the wallet popup. |
+-
+-## Claim
+-
+-1. Open **NFTs**.
+-2. Scroll to **Your NFTs**.
+-3. Click **Claim All** or per-tier **Claim**.
+-4. Sign. The contract pays the accumulated zkLTC + USDC + LDEX since your last claim per held NFT.
+-
+-The success card lists each token + amount.
++| "play more games first" | Trying to promote a pass — see [Promotion](/nfts/#promotion-not-live-yet), it's disabled until gameplay ships. |
++| Wallet on wrong network | Use the **Switch to Base** prompt before minting. |
++| Limit reached | Public mint is capped at 2 per wallet. |
++| User rejected | You declined the wallet popup. |
+ 
+-### Claim cooldown
++## Claim (LD Points → Base)
+ 
+-Claim is once per day per tier. The contract tracks `lastClaimDay`:
++Leveling up a Champion costs **LD Points**, spent on Base. Those points are earned on the LitVM testnet and have to be claimed across to Base first:
+ 
+-```solidity
+-uint256 today = block.timestamp / 86400;
+-require(today > lastClaimDay[user][tier], "Already claimed today");
+-```
++1. Open the **My Points** tab.
++2. Enter an amount (or **Max**) and hit **Claim**.
++3. Your LD balance on LitVM burns first, then a themed success card confirms the points landed on Base — usually within about 30 seconds.
++4. Claimed points now count toward leveling up your Champions.
+ 
+-If you try to claim again on the same day the tx reverts. Skipping days is fine - the next claim pays for all skipped days at once.
++You can't claim more than your current LD balance — if a claim briefly overlaps with a previous one, the amount is checked against your balance at claim time and rejected if it no longer covers it.
+ 
+-### Multi-tier claim
++> The old points system (referred to internally as "V7") is frozen. Every V7 balance was already converted into LD Points at a 10:1 ratio, so LD Points is the only balance that matters going forward.
+ 
+-If you hold multiple tiers, you can call **Claim All** which loops through and claims each in one tx. Saves gas vs three separate claims.
++## Level up
+ 
+-## Pending rewards display
++1. Open the **Levels** tab and pick a Champion.
++2. The cost to reach the next tier is shown up front (see the schedule in [Tiers & Rewards](/nfts/tiers)).
++3. Confirm — the transaction spends LD Points you've already claimed onto Base and your Champion's tier updates immediately once it confirms.
+ 
+-The card shows "Pending: X zkLTC + Y USDC + Z LDEX" computed live from `getPendingRewards(user)`. This number grows every block until you claim.
++## Repair
+ 
+-> Claim every 1–2 days to keep gas overhead low. Claiming every block is wasteful.
++If a pass is ever marked damaged (from a lost gameplay challenge, once gameplay ships), it needs repairing before it can level up again or enter another challenge. Repair costs a flat USDC fee plus points, the same across every rarity and tier.
+diff --git a/docs/nfts/tiers.md b/docs/nfts/tiers.md
+index f50fd49..963d2a3 100644
+--- a/docs/nfts/tiers.md
++++ b/docs/nfts/tiers.md
+@@ -1,62 +1,46 @@
+ # Tiers & Rewards
+ 
+-Detailed look at each Genesis tier, who they're for, and how the math plays out long-term.
++How Genesis Champions progress, what each level costs, and what holders get at each rarity.
+ 
+-## LitShard (Common)
++## Rarities
+ 
+-| Field | Value |
+-| --- | --- |
+-| Mint cost | 1,000 pts |
+-| Max supply | 9,999 |
+-| Daily zkLTC | 0.0001 |
+-| Daily USDC | 10 |
+-| Daily LDEX | 2 |
++| Rarity | Tiers | Supply cap | Community-available |
++| --- | --- | --- | --- |
++| Common | 1 – 9 | 900 | 800 (100 minted to the team at Tier 9) |
++| Rare | 1 – 5 | 460 | via promotion only (60 minted to the team) |
++| Epic | 1 – 3 | 190 | via promotion only (30 minted to the team) |
++| Legend | single max tier | 50 | via promotion only (10 minted to the team) |
+ 
+-**Recommended for**: every active user. The bar is low (1k points = 1–2 weeks of casual play) and it unlocks the faucet.
++Every community pass starts at **Common Tier 1**.
+ 
+-**Long-term math** (over 30 days): ~0.003 zkLTC, 300 USDC, 60 LDEX per shard.
++## Leveling costs (Common track)
+ 
+-## LitCore (Rare)
++Leveling spends **LD Points**, claimed onto Base from your LitVM balance. The cost rises by a flat 200 points each level:
+ 
+-| Field | Value |
++| Level-up | Cost |
+ | --- | --- |
+-| Mint cost | 5,000 pts |
+-| Max supply | 4,999 |
+-| Daily zkLTC | 0.0005 |
+-| Daily USDC | 50 |
+-| Daily LDEX | 10 |
+-
+-**Recommended for**: power users grinding the leaderboard. Roughly 5x the LitShard yield for 5x the cost.
++| Tier 1 → 2 | 500 LD |
++| Tier 2 → 3 | 700 LD |
++| Tier 3 → 4 | 900 LD |
++| Tier 4 → 5 | 1,100 LD |
++| Tier 5 → 6 | 1,300 LD |
++| Tier 6 → 7 | 1,500 LD |
++| Tier 7 → 8 | 1,700 LD |
++| Tier 8 → 9 | 1,900 LD |
+ 
+-**Long-term math** (30 days): ~0.015 zkLTC, 1,500 USDC, 300 LDEX per core.
++Reaching Tier 9 is the current ceiling — promotion into Rare requires on-chain gameplay, which hasn't launched yet.
+ 
+-## LitGod (Legendary)
++## Holder utility by rarity
+ 
+-| Field | Value |
++| Rarity | Utility |
+ | --- | --- |
+-| Mint cost | 10,000 pts |
+-| Max supply | 999 |
+-| Daily zkLTC | 0.005 |
+-| Daily USDC | 500 |
+-| Daily LDEX | 100 |
+-
+-**Recommended for**: collectors and OG users. Only 999 will ever mint. Highest scarcity, highest yield.
+-
+-**Long-term math** (30 days): ~0.15 zkLTC, 15,000 USDC, 3,000 LDEX per god.
+-
+-## Comparison
+-
+-| Metric | LitShard | LitCore | LitGod |
+-| --- | --- | --- | --- |
+-| Cost ÷ daily zkLTC | 10M pts | 10M pts | 5M pts |
+-| Cost ÷ daily USDC | 100 pts | 100 pts | 50 pts |
+-| Cost ÷ daily LDEX | 500 pts | 500 pts | 250 pts |
+-| Scarcity | 9,999 | 4,999 | 999 |
+-
+-LitGod is the most efficient yield-per-point but the hardest to acquire because of the 10,000 pts cost.
++| Common | Base membership pass; eligible to level up |
++| Rare | + priority access to partnerships and community giveaways |
++| Epic | + future $LITDEX airdrop allocation, + 10% weekly share of protocol repair-fee revenue (split among Epic holders) |
++| Legend | + larger airdrop allocation, + 20% weekly share of protocol repair-fee revenue (split among a maximum of 50 Legend holders) |
+ 
+ ## Mint progress
+ 
+-The NFTs page shows live mint progress per tier (`current / max`). LitGods are expected to sell out first.
++The mint page shows live progress (`minted / 1,000`) on Base Mainnet, read directly from the contract.
+ 
+-> Plan your mint. Saving 10,000 points takes weeks of consistent activity. Many users mint a LitShard early to unlock the faucet, then stack pts toward a LitCore or LitGod.
++> Promotion mechanics (Rare/Epic/Legend via gameplay) are covered in full in the [Whitepaper](/../whitepaper) once gameplay ships.
+diff --git a/docs/points/index.md b/docs/points/index.md
+index f1899e6..9fa78d0 100644
+--- a/docs/points/index.md
++++ b/docs/points/index.md
+@@ -26,10 +26,12 @@ Every meaningful interaction earns points:
+ 
+ Points convert to:
+ 
+-- **NFT mints** - see [NFTs → Tiers](/nfts/tiers). LitShard costs 1,000 pts.
++- **Leveling up your Genesis Champions NFT** on Base — see [NFTs → Tiers](/nfts/tiers) for the exact cost per level (500 LD for the first level, +200 per level after that). This is done through **LD Points**, the current points system — see the note below.
+ - **zkLTC** (when game-side conversion is open) at a fixed rate.
+ - **Leaderboard prizes** - top 20 users get a weekly zkLTC bonus payout.
+ 
++> **LD Points vs. the points described below.** This page's earning table describes the original "V7" points contract. V7 earning is switched off — it's frozen, not removed — and every V7 balance was already converted into **LD Points** at a 10:1 ratio. LD Points is what you actually spend to level up an NFT today, and it carries its own daily cap (25 LD/day, with multipliers for higher-tier NFT holders). The exact per-action LD earning rates aren't finalized in this doc yet; check the in-app Points dashboard for your current LD total and today's cap.
++
+ ## Where points live
+ 
+ Points are tracked on the `PointsSystem` contract on LiteForge. The dashboard reads `getPoints(address)` which returns:
+diff --git a/docs/reference/contracts.md b/docs/reference/contracts.md
+index e43258d..9c7f2b0 100644
+--- a/docs/reference/contracts.md
++++ b/docs/reference/contracts.md
+@@ -1,6 +1,32 @@
+ # Contracts
+ 
+-All LitDEX contracts on the LiteForge chain (4441). Verified on the [explorer](https://liteforge.explorer.caldera.xyz).
++## Genesis Champions (Base Mainnet)
++
++The live NFT collection. Both contracts are UUPS proxies, independently verified on Basescan and Sourcify.
++
++| Contract | Address |
++| --- | --- |
++| `LitdexNFT` (main collection) | `0xaCA7EFFcd0c4689D131C8d18C09ea1994F2A5d4d` |
++| `BasePoints` (points/claim on Base) | `0xDa73c4c7fcA2E688A77b04137d56740085c2B8E7` |
++| Payment token (native USDC on Base) | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
++
++| Field | Value |
++| --- | --- |
++| Chain | Base Mainnet |
++| Chain ID | 8453 |
++| Standard | ERC-721 |
++
++### LD Points (LitVM)
++
++| Contract | Address |
++| --- | --- |
++| `LDPoints` (UUPS proxy) | `0x26974eF1090b0cd9719B755aEc3d75a5DdD34e01` |
++
++LD Points is the current, active points system on LitVM. It replaces the earlier "V7" points contract below, which is now frozen — every V7 balance was already converted into LD Points at a 10:1 ratio.
++
++## LiteForge testnet (legacy)
++
++All contracts below are on the LiteForge chain (4441), verified on the [explorer](https://liteforge.explorer.caldera.xyz). `PointsSystem` (V7) is frozen — see LD Points above for the current system.
+ 
+ ## Core
+ 
+diff --git a/package-lock.json b/package-lock.json
+index 0ddd044..cd916d7 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -22,6 +22,7 @@
+         "ethers": "^6.16.0",
+         "express": "^4.21.2",
+         "lucide-react": "^0.546.0",
++        "marked": "^18.0.13",
+         "motion": "^12.23.24",
+         "react": "^19.0.1",
+         "react-dom": "^19.0.1",
+@@ -8725,6 +8726,18 @@
+         "@jridgewell/sourcemap-codec": "^1.5.5"
+       }
+     },
++    "node_modules/marked": {
++      "version": "18.0.13",
++      "resolved": "https://registry.npmjs.org/marked/-/marked-18.0.13.tgz",
++      "integrity": "sha512-xTxVzZsBFwunP6HDmtBkabUQEYArnP7/rMDGmPj9SlrKlQ4i8MdYVow+nJL0eOqwpUqhzBoTBRADGN6uYwPyOw==",
++      "license": "MIT",
++      "bin": {
++        "marked": "bin/marked.js"
++      },
++      "engines": {
++        "node": ">= 20"
++      }
++    },
+     "node_modules/math-intrinsics": {
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz",
+diff --git a/package.json b/package.json
+index 94a0edf..8169c4e 100644
+--- a/package.json
++++ b/package.json
+@@ -26,6 +26,7 @@
+     "ethers": "^6.16.0",
+     "express": "^4.21.2",
+     "lucide-react": "^0.546.0",
++    "marked": "^18.0.13",
+     "motion": "^12.23.24",
+     "react": "^19.0.1",
+     "react-dom": "^19.0.1",
+diff --git a/src/App.tsx b/src/App.tsx
+index d604506..2ce0260 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -53,10 +53,15 @@ const NFT_SHOWCASE_VIDEO_MP4 = '/media/boardpass-desktopview.mp4';
+ const NFT_SHOWCASE_VIDEO_WEBM = '/media/boardpass-desktopview.webm';
+ 
+ // --- Types ---
+-type PageID = 'swap' | 'pool' | 'deploy' | 'points' | 'checkin' | 'nfts' | 'messenger' | 'quests' | 'games' | 'faucet' | 'hub' | 'chatui';
++export type PageID = 'swap' | 'pool' | 'deploy' | 'points' | 'checkin' | 'nfts' | 'messenger' | 'quests' | 'games' | 'faucet' | 'hub' | 'chatui' | 'whitepaper' | 'roadmap' | 'about' | 'faq' | 'docs';
+ import HubPage from './components/HubPage';
+ import ChatUIPage from './components/ChatUIPage';
+ import { ChampionsDashboard } from './champions/ChampionsDashboard';
++import WhitepaperPage from './components/legal/WhitepaperPage';
++import RoadmapPage from './components/legal/RoadmapPage';
++import AboutPage from './components/legal/AboutPage';
++import FaqPage from './components/legal/FaqPage';
++import DocsPage from './docs/DocsPage';
+ 
+ interface NavItemProps {
+   icon: any;
+@@ -7441,6 +7446,11 @@ export default function App() {
+     faucet: '/faucet',
+     hub: '/hub',
+     chatui: '/hub',
++    whitepaper: '/whitepaper',
++    roadmap: '/roadmap',
++    about: '/about',
++    faq: '/faq',
++    docs: '/docs',
+   };
+   const pathToPage = (path: string): PageID => {
+     const seg = path.split('/').filter(Boolean)[0] || '';
+@@ -7459,6 +7469,11 @@ export default function App() {
+       case 'faucet': return 'faucet';
+       case 'hub':
+       case 'chatui': return 'chatui';
++      case 'whitepaper': return 'whitepaper';
++      case 'roadmap': return 'roadmap';
++      case 'about': return 'about';
++      case 'faq': return 'faq';
++      case 'docs': return 'docs';
+       default: return 'swap';
+     }
+   };
+@@ -7540,6 +7555,11 @@ export default function App() {
+       case 'faucet': return <FaucetPage />;
+       case 'hub': return <HubPage />;
+       case 'chatui': return <ChatUIPage />;
++      case 'whitepaper': return <WhitepaperPage setPage={setActivePage} />;
++      case 'roadmap': return <RoadmapPage setPage={setActivePage} />;
++      case 'about': return <AboutPage setPage={setActivePage} />;
++      case 'faq': return <FaqPage setPage={setActivePage} />;
++      case 'docs': return <DocsPage />;
+       default: return <SwapPage />;
+     }
+   };
+@@ -7732,10 +7752,14 @@ export default function App() {
+             </div>
+             <span className="text-brand-text-muted text-xs font-mono">LitDEX Testnet</span>
+           </div>
+-          <div className="flex gap-8 text-xs uppercase font-mono tracking-widest text-brand-text-muted">
++          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs uppercase font-mono tracking-widest text-brand-text-muted">
++            <button onClick={() => setActivePage('whitepaper')} className="hover:text-white transition-colors">Whitepaper</button>
++            <button onClick={() => setActivePage('roadmap')} className="hover:text-white transition-colors">Roadmap</button>
++            <button onClick={() => setActivePage('about')} className="hover:text-white transition-colors">About Us</button>
++            <button onClick={() => setActivePage('faq')} className="hover:text-white transition-colors">FAQ</button>
++            <button onClick={() => setActivePage('docs')} className="hover:text-white transition-colors">Docs</button>
+             <a href="https://x.com/LitDEXApp" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter (X)</a>
+             <a href="https://t.me/litdex_discussion" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
+-            <a href="https://docs.litdex.test-hub.xyz" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Docs</a>
+           </div>
+         </div>
+       </footer>
+diff --git a/src/components/legal/AboutPage.tsx b/src/components/legal/AboutPage.tsx
+new file mode 100644
+index 0000000..95326cf
+--- /dev/null
++++ b/src/components/legal/AboutPage.tsx
+@@ -0,0 +1,72 @@
++import type { PageID } from "@/App";
++type Props = { setPage: (p: PageID) => void };
++
++const STATS: [string, string][] = [
++  ["1,000", "Total Supply"],
++  ["1,600+", "LitVM Community Members"],
++  ["4", "Rarity Tiers"],
++  ["Base", "Mainnet Chain"],
++];
++
++export default function AboutPage({ setPage }: Props) {
++  return (
++    <div className="min-h-[calc(100vh-80px)] px-4 py-10 md:px-8 md:py-16">
++      <div className="mx-auto w-full max-w-5xl rounded-[8px] border border-brand-border bg-brand-surface p-6 shadow-2xl sm:p-8 md:p-14">
++        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-brand-control">
++          LitDEX Network
++        </p>
++        <h1 className="mt-4 font-sans text-4xl font-extrabold uppercase tracking-tight text-brand-text-primary md:text-6xl">
++          About LitDEX
++        </h1>
++        <span className="mt-4 block h-1 w-16 rounded-full bg-brand-control" />
++
++        <div className="mt-8 max-w-4xl space-y-5 text-base leading-8 text-brand-text-muted md:text-lg">
++          <p>
++            LitDEX Genesis Champions is the first NFT collection to bridge the LitDEX ecosystem from
++            testnet to mainnet. Built on top of LitVM, an active testnet DeFi platform that has hosted
++            over 1,600 participants across swaps, liquidity provision, staking, and daily engagement,
++            Genesis Champions carries that existing community, and the points they&apos;ve earned,
++            directly onto Base.
++          </p>
++          <p>
++            Every pass in the collection is a living, on-chain record rather than static art. It starts as
++            Common and evolves in rarity and tier as its holder engages with the ecosystem: earning
++            points on LitVM, spending them to level up, and eventually competing in on-chain gameplay
++            to be promoted into rarer tiers.
++          </p>
++          <p>
++            The collection totals 1,000 passes on Base Mainnet, with core mechanics governed entirely by
++            verified, open-source smart contracts. Nothing about supply, minting, leveling, or revenue
++            distribution relies on a centralized backend that could be changed without transparency.
++          </p>
++          <p>
++            LitDEX&apos;s long-term goal is to keep building real utility for holders: partnerships,
++            revenue-sharing from protocol activity, and an eventual $LITDEX token, all rewarding the
++            holders who help grow the ecosystem from the ground up.
++          </p>
++        </div>
++
++        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
++          {STATS.map(([value, label]) => (
++            <div
++              key={label}
++              className="rounded-[8px] border border-brand-border bg-brand-surface-2 p-5 shadow-md"
++            >
++              <p className="font-sans text-3xl font-extrabold uppercase text-brand-control">{value}</p>
++              <p className="mt-2 font-mono text-[10px] font-bold uppercase tracking-widest text-brand-text-muted">
++                {label}
++              </p>
++            </div>
++          ))}
++        </div>
++
++        <button
++          onClick={() => setPage("nfts")}
++          className="mt-10 w-full sm:w-auto min-h-12 px-8 py-3 rounded-lg bg-brand-text-primary text-brand-bg font-mono font-bold text-sm cursor-pointer touch-manipulation select-none active:scale-[0.98]"
++        >
++          Back to mint
++        </button>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/components/legal/FaqPage.tsx b/src/components/legal/FaqPage.tsx
+new file mode 100644
+index 0000000..08738c8
+--- /dev/null
++++ b/src/components/legal/FaqPage.tsx
+@@ -0,0 +1,71 @@
++import type { PageID } from "@/App";
++import { useState } from "react";
++import { ChevronDown } from "lucide-react";
++
++type Props = { setPage: (p: PageID) => void };
++
++const FAQS: [string, string][] = [
++  ["What is LitDEX Genesis Champions?", "A collection of 1,000 dynamic, evolving NFT passes on Base Mainnet. Each pass starts as Common and can be leveled up, and eventually promoted through Rare, Epic, and Legend, based on on-chain activity."],
++  ["What blockchain is this on?", "Base Mainnet. All contracts are deployed on Base and verified on Basescan and Sourcify."],
++  ["How do I mint a pass?", "Connect your wallet at litdex.test-hub.xyz/nfts. If you're whitelist-eligible, you'll see your discounted mint options first. Otherwise, mint in the public sale for $2 USDC once it opens, limited to 2 per wallet."],
++  ["Who is eligible for the whitelist?", "Holders of the original LitVM testnet NFTs: LitShard (Common), LitCore (Rare), and LitGod (Epic). Each testnet NFT held grants one discounted mint: 20% off for LitShard, 30% off for LitCore, and 50% off for LitGod. Discounts apply per NFT held."],
++  ["What's the difference between whitelist and public mint?", "Whitelist mint opens first and is exclusively for eligible LitVM holders at a discount. Public mint opens 48 hours later at the full $2 USDC price and is open to everyone, limited to 2 mints per wallet."],
++  ["What are the rarities and tiers?", "Four rarities: Common (Tiers 1-9), Rare (Tiers 1-5), Epic (Tiers 1-3), and Legend (a single max tier). Every pass starts as Common Tier 1."],
++  ["How does leveling up work?", "Leveling up spends LD Points, LitDEX's current points system. You earn LD Points through activity on the LitVM testnet and claim them onto Base. The cost starts at 500 LD for Tier 1→2 and increases by 200 LD each level after that (700, 900, 1100...1900 up to Tier 9)."],
++  ["How does promotion between rarities work?", "Promotion — moving from Common to Rare, Rare to Epic, or Epic to Legend — requires reaching your rarity's max tier and winning on-chain gameplay challenges. Gameplay hasn't shipped yet, so promotion is currently disabled on-chain; Common Tier 9 is the ceiling for now."],
++  ["What happens if I lose a game challenge?", "Your pass becomes damaged and must be repaired before it can be leveled up or used in further challenges. Repair costs a flat USDC fee plus points, the same at every rarity and tier."],
++  ["What do I get for holding a higher-tier pass?", "Rare and above receive priority access to partnerships and community giveaways. Epic and above receive a future $LITDEX airdrop allocation plus a 10% weekly share of protocol repair revenue; Legend holders receive a larger airdrop share and split a 20% weekly share among a maximum of 50 holders."],
++  ["Is the smart contract safe and verified?", "Yes. Both core contracts, LitdexNFT and BasePoints, are open-source and independently verified on Basescan and Sourcify, so anyone can audit the exact rules governing the collection."],
++  ["What is the total supply?", "1,000 passes total. 900 enter through the Common tier — 800 for the community and 100 minted to the team. The remaining 100 team passes were minted directly at Rare, Epic, and Legend for collaborations and promotional purposes."],
++  ["Where can I see or trade my pass after minting?", "On OpenSea, under the LitDEX collection. Every pass's tier, rarity, and full history are visible on-chain."],
++  ["Where can I read more details?", "The full whitepaper is linked in the site footer, covering the complete supply model, contract addresses, and mechanics."],
++];
++
++function FaqItem({ question, answer }: { question: string; answer: string }) {
++  const [open, setOpen] = useState(false);
++  return (
++    <div className="rounded-[8px] border border-brand-border bg-brand-surface-2 px-5 shadow-sm transition-shadow md:px-6">
++      <button
++        onClick={() => setOpen((o) => !o)}
++        className="flex w-full items-center justify-between gap-4 py-5 text-left text-base font-bold text-brand-text-primary md:text-lg"
++      >
++        <span className="min-w-0 pr-4">{question}</span>
++        <ChevronDown
++          className={`size-5 shrink-0 text-brand-text-muted transition-transform ${open ? "rotate-180" : ""}`}
++        />
++      </button>
++      {open && (
++        <p className="max-w-3xl pb-5 text-sm leading-7 text-brand-text-muted md:text-base">{answer}</p>
++      )}
++    </div>
++  );
++}
++
++export default function FaqPage({ setPage }: Props) {
++  return (
++    <div className="min-h-[calc(100vh-80px)] px-4 py-10 md:px-8 md:py-16">
++      <section className="mx-auto w-full max-w-5xl rounded-[8px] border border-brand-border bg-brand-surface p-6 shadow-2xl sm:p-8 md:p-14">
++        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-brand-control">
++          Help center
++        </p>
++        <h1 className="mt-4 font-sans text-4xl font-extrabold uppercase tracking-tight text-brand-text-primary md:text-6xl">
++          FAQ
++        </h1>
++        <span className="mt-4 block h-1 w-16 rounded-full bg-brand-control" />
++
++        <div className="mt-10 space-y-3">
++          {FAQS.map(([question, answer]) => (
++            <FaqItem key={question} question={question} answer={answer} />
++          ))}
++        </div>
++
++        <button
++          onClick={() => setPage("nfts")}
++          className="mt-10 w-full sm:w-auto min-h-12 px-8 py-3 rounded-lg bg-brand-text-primary text-brand-bg font-mono font-bold text-sm cursor-pointer touch-manipulation select-none active:scale-[0.98]"
++        >
++          Back to mint
++        </button>
++      </section>
++    </div>
++  );
++}
+diff --git a/src/components/legal/RoadmapPage.tsx b/src/components/legal/RoadmapPage.tsx
+new file mode 100644
+index 0000000..0f55108
+--- /dev/null
++++ b/src/components/legal/RoadmapPage.tsx
+@@ -0,0 +1,138 @@
++import type { PageID } from "@/App";
++import { TrainFront } from "lucide-react";
++
++type Props = { setPage: (p: PageID) => void };
++
++const MILESTONES = [
++  {
++    quarter: "Q3 2026",
++    title: "Mint live",
++    description:
++      "Genesis Champions launches on Base Mainnet. Whitelist and public mint open, bringing the LitDEX community fully on-chain.",
++    current: true,
++  },
++  {
++    quarter: "Q4 2026",
++    title: "Game live",
++    description:
++      "On-chain gameplay launches, unlocking the promotion path between rarities. Common, Rare, Epic, and Legend tiers become earnable through play.",
++  },
++  {
++    quarter: "Q1 2027",
++    title: "Holder utility activation",
++    description:
++      "Partnership opportunities, community giveaways, and protocol repair-revenue sharing begin for Rare, Epic, and Legend holders.",
++  },
++  {
++    quarter: "Q2 2027",
++    title: "TGE and airdrop",
++    description:
++      "$LITDEX token generation event. Airdrop allocations distributed to Epic and Legend holders as outlined in the whitepaper.",
++  },
++];
++
++function StationMarker({ current, mobile = false }: { current?: boolean; mobile?: boolean }) {
++  if (current) {
++    return (
++      <span
++        className={`${
++          mobile ? "relative mt-4" : "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
++        } z-20 flex size-9 items-center justify-center rounded-full border-2 border-brand-bg bg-brand-control text-brand-control-foreground shadow-[0_0_20px_rgba(153,153,153,0.5)]`}
++        aria-label="Current milestone"
++      >
++        <TrainFront className="size-5" strokeWidth={2} aria-hidden="true" />
++      </span>
++    );
++  }
++  return (
++    <span
++      className={`${
++        mobile ? "relative z-10 ml-0.5 mt-6" : "absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
++      } block size-5 rounded-full border-[3px] border-brand-border bg-brand-surface`}
++      aria-hidden="true"
++    />
++  );
++}
++
++function MilestoneCard({ milestone }: { milestone: (typeof MILESTONES)[number] }) {
++  return (
++    <article className="w-full rounded-[8px] border border-brand-border bg-brand-surface-2 p-5 shadow-lg">
++      <div className="flex flex-wrap items-center gap-2">
++        <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-brand-control">
++          {milestone.quarter}
++        </span>
++        {milestone.current && (
++          <span className="rounded-full bg-brand-control px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-widest text-brand-control-foreground">
++            Current
++          </span>
++        )}
++      </div>
++      <h2 className="mt-3 text-lg font-bold uppercase text-brand-text-primary">{milestone.title}</h2>
++      <p className="mt-3 text-sm leading-6 text-brand-text-muted">{milestone.description}</p>
++    </article>
++  );
++}
++
++export default function RoadmapPage({ setPage }: Props) {
++  return (
++    <div className="min-h-[calc(100vh-80px)] px-4 py-10 md:px-8 md:py-16">
++      <section className="mx-auto w-full max-w-[1400px] rounded-[8px] border border-brand-border bg-brand-surface p-6 shadow-2xl sm:p-8 md:p-12">
++        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-brand-control">
++          What comes next
++        </p>
++        <h1 className="mt-3 font-sans text-4xl font-extrabold uppercase tracking-tight text-brand-text-primary md:text-6xl">
++          Roadmap
++        </h1>
++        <span className="mt-4 block h-1 w-16 rounded-full bg-brand-control" />
++
++        {/* Mobile: vertical list */}
++        <div className="relative mt-12 md:hidden">
++          <div className="absolute bottom-4 left-[9px] top-4 w-[2px] bg-brand-border" aria-hidden="true" />
++          <div className="space-y-8">
++            {MILESTONES.map((milestone) => (
++              <div key={milestone.quarter} className="relative grid grid-cols-[24px_minmax(0,1fr)] gap-4">
++                <StationMarker current={milestone.current === true} mobile />
++                <MilestoneCard milestone={milestone} />
++              </div>
++            ))}
++          </div>
++        </div>
++
++        {/* Desktop: horizontal timeline */}
++        <div className="relative mt-16 hidden min-h-[540px] grid-cols-4 md:grid">
++          <div className="absolute inset-x-0 top-1/2 h-[2px] -translate-y-1/2 bg-brand-border" aria-hidden="true" />
++          {MILESTONES.map((milestone, index) => {
++            const above = index % 2 === 0;
++            return (
++              <div key={milestone.quarter} className="relative grid grid-rows-2 px-3">
++                {above && (
++                  <div className="flex items-end pb-14">
++                    <MilestoneCard milestone={milestone} />
++                  </div>
++                )}
++                <div
++                  className={`absolute left-1/2 w-px -translate-x-1/2 bg-brand-border ${
++                    above ? "bottom-1/2 h-10" : "top-1/2 h-10"
++                  }`}
++                />
++                <StationMarker current={milestone.current === true} />
++                {!above && (
++                  <div className="row-start-2 flex items-start pt-14">
++                    <MilestoneCard milestone={milestone} />
++                  </div>
++                )}
++              </div>
++            );
++          })}
++        </div>
++
++        <button
++          onClick={() => setPage("nfts")}
++          className="mt-10 w-full sm:w-auto min-h-12 px-8 py-3 rounded-lg bg-brand-text-primary text-brand-bg font-mono font-bold text-sm cursor-pointer touch-manipulation select-none active:scale-[0.98]"
++        >
++          Back to mint
++        </button>
++      </section>
++    </div>
++  );
++}
+diff --git a/src/components/legal/WhitepaperPage.tsx b/src/components/legal/WhitepaperPage.tsx
+new file mode 100644
+index 0000000..1477b0a
+--- /dev/null
++++ b/src/components/legal/WhitepaperPage.tsx
+@@ -0,0 +1,299 @@
++import type { PageID } from "@/App";
++type Props = { setPage: (p: PageID) => void };
++
++const TOC = [
++  "Project Overview",
++  "Smart Contracts",
++  "Supply Model",
++  "Tier Structure",
++  "Minting",
++  "Progression System",
++  "Repair Mechanic",
++  "Holder Utility",
++  "Provenance",
++  "Transparency",
++  "Roadmap",
++];
++
++function Section({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
++  return (
++    <section id={`s${n}`} className="scroll-mt-24 border-t border-brand-border pt-8 mt-8 first:mt-0 first:border-0 first:pt-0">
++      <h2 className="text-xl font-bold text-brand-text-primary md:text-2xl">
++        <span className="text-brand-control">{n}.</span> {title}
++      </h2>
++      <div className="mt-4 space-y-4 text-sm leading-7 text-brand-text-muted md:text-base">{children}</div>
++    </section>
++  );
++}
++
++function Table({ head, rows }: { head: string[]; rows: string[][] }) {
++  return (
++    <div className="overflow-x-auto">
++      <table className="w-full border-collapse text-sm">
++        <thead>
++          <tr>
++            {head.map((h) => (
++              <th
++                key={h}
++                className="border border-brand-border bg-brand-surface-2 px-4 py-2 text-left font-mono text-[11px] font-bold uppercase tracking-widest text-brand-text-primary"
++              >
++                {h}
++              </th>
++            ))}
++          </tr>
++        </thead>
++        <tbody>
++          {rows.map((row, i) => (
++            <tr key={i}>
++              {row.map((cell, j) => (
++                <td key={j} className="border border-brand-border px-4 py-2 text-brand-text-muted">
++                  {cell}
++                </td>
++              ))}
++            </tr>
++          ))}
++        </tbody>
++      </table>
++    </div>
++  );
++}
++
++export default function WhitepaperPage({ setPage }: Props) {
++  return (
++    <div className="min-h-[calc(100vh-80px)] px-4 py-10 md:px-8 md:py-16">
++      <div className="mx-auto w-full max-w-4xl rounded-[8px] border border-brand-border bg-brand-surface p-6 shadow-2xl sm:p-8 md:p-14">
++        <p className="font-mono text-[11px] font-bold uppercase tracking-widest text-brand-control">
++          LitDEX Genesis Champions
++        </p>
++        <h1 className="mt-4 font-sans text-4xl font-extrabold uppercase tracking-tight text-brand-text-primary md:text-6xl">
++          Whitepaper
++        </h1>
++        <span className="mt-4 block h-1 w-16 rounded-full bg-brand-control" />
++        <p className="mt-6 max-w-2xl text-sm text-brand-text-muted md:text-base">
++          An evolving on-chain membership pass collection on Base Mainnet. 2026.
++        </p>
++
++        <div className="mt-8 rounded-[8px] border border-brand-border bg-brand-surface-2 p-6">
++          <p className="text-sm leading-7 text-brand-text-muted md:text-base">
++            LitDEX Genesis Champions is a collection of 1,000 on-chain membership passes deployed on
++            Base Mainnet. Unlike static NFT art, each pass is a live on-chain record whose rarity and tier
++            evolve with the holder&apos;s activity. The collection extends the existing LitDEX and LitVM
++            ecosystem, an active testnet DeFi platform with over 1,600 historical participants, giving
++            early community members a direct, discounted path onto the mainnet collection. This document
++            describes the collection&apos;s smart contracts, supply model, minting process, progression
++            mechanics, and the utility granted to holders at each tier.
++          </p>
++        </div>
++
++        {/* Table of contents */}
++        <div className="mt-8 grid grid-cols-1 gap-2 sm:grid-cols-2">
++          {TOC.map((title, i) => (
++            <a
++              key={title}
++              href={`#s${i + 1}`}
++              className="rounded-lg px-3 py-2 text-sm text-brand-text-muted transition-colors hover:bg-brand-surface-2 hover:text-brand-text-primary"
++            >
++              <span className="font-mono text-brand-control">{i + 1}.</span> {title}
++            </a>
++          ))}
++        </div>
++
++        <div className="mt-10">
++          <Section n={1} title="Project Overview">
++            <p>
++              LitDEX Genesis Champions is a dynamic, evolving membership pass collection built on Base
++              Mainnet. Each pass begins at the lowest rarity and tier, and progresses upward as its holder
++              engages with the LitDEX ecosystem, earning points on the LitVM testnet and spending them to
++              level up, and eventually competing in on-chain gameplay to be promoted into rarer tiers.
++            </p>
++            <p>
++              The collection is built on top of an already active community. LitDEX and its LitVM testnet
++              have accumulated over 1,600 historical participants across activities such as swaps,
++              liquidity provision, staking, and daily check-ins. Genesis Champions is designed as the
++              bridge that carries that existing community, and its earned points, onto Base Mainnet.
++            </p>
++          </Section>
++
++          <Section n={2} title="Smart Contracts">
++            <p>
++              The collection is governed by two core smart contracts deployed on Base Mainnet, both
++              upgradeable via the UUPS proxy pattern and independently verified on Basescan and Sourcify.
++              Verified source code allows anyone to audit the exact logic governing minting, leveling,
++              promotion, and revenue distribution.
++            </p>
++            <Table
++              head={["Contract", "Address"]}
++              rows={[
++                ["LitdexNFT (main collection, UUPS proxy)", "0xaCA7EFFcd0c4689D131C8d18C09ea1994F2A5d4d"],
++                ["BasePoints (points and claim contract, UUPS proxy)", "0xDa73c4c7fcA2E688A77b04137d56740085c2B8E7"],
++                ["Payment token (native USDC on Base)", "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"],
++              ]}
++            />
++            <p>
++              The standard used is ERC-721. Payments across the collection, minting, and repair, are
++              settled in native USDC on Base.
++            </p>
++          </Section>
++
++          <Section n={3} title="Supply Model">
++            <p>
++              The total collection size is fixed at 1,000 passes. Every pass begins as Common and can be
++              promoted upward through Rare, Epic, and ultimately Legend, via gameplay once the promotion
++              mechanism launches. Each rarity has its own supply cap, forming an independent tier within
++              the overall promotion funnel.
++            </p>
++            <Table
++              head={["Rarity", "Cap", "Team Allocation", "Community Available"]}
++              rows={[
++                ["Common", "900", "100 (Tier 9)", "800 (entry point)"],
++                ["Rare", "460", "60 (Tier 5)", "Via promotion"],
++                ["Epic", "190", "30 (Tier 3)", "Via promotion"],
++                ["Legend", "50", "10 (MAX)", "Via promotion"],
++              ]}
++            />
++            <p>
++              Of the 1,000 total passes, 900 enter the collection through the Common tier: 800 are
++              available to the community, and 100 were minted directly to the project team at Common Tier
++              9. The remaining 100 team passes were minted directly into the higher rarities, 60 at Rare
++              Tier 5, 30 at Epic Tier 3, and 10 at Legend, reserved for collaborations and promotional
++              purposes. This full allocation is transparent and verifiable on-chain.
++            </p>
++          </Section>
++
++          <Section n={4} title="Tier Structure">
++            <p>
++              Within each rarity, passes progress through a fixed number of tiers before becoming
++              eligible for promotion to the next rarity.
++            </p>
++            <Table
++              head={["Rarity", "Tiers"]}
++              rows={[
++                ["Common", "Tier 1 through Tier 9"],
++                ["Rare", "Tier 1 through Tier 5"],
++                ["Epic", "Tier 1 through Tier 3"],
++                ["Legend", "Single MAX tier, no sub-tiers"],
++              ]}
++            />
++          </Section>
++
++          <Section n={5} title="Minting">
++            <p>Minting takes place in two phases, both priced in USDC.</p>
++            <h3 className="text-base font-bold text-brand-text-primary">5.1 Whitelist Mint</h3>
++            <p>
++              The whitelist phase is reserved for holders of the original LitVM testnet NFTs: LitShard,
++              LitCore, and LitGod. Each testnet NFT held grants one discounted mint on Base Mainnet:
++            </p>
++            <ul className="list-disc space-y-1 pl-5">
++              <li>LitShard (Common) holders receive 20% off</li>
++              <li>LitCore (Rare) holders receive 30% off</li>
++              <li>LitGod (Epic) holders receive 50% off</li>
++            </ul>
++            <p>
++              Discounts apply per NFT held. A wallet holding three LitShard NFTs, for example, is entitled
++              to three separate 20%-off mints. The base public mint price is $2 USDC.
++            </p>
++            <h3 className="text-base font-bold text-brand-text-primary">5.2 Public Mint</h3>
++            <p>
++              The public mint is open to everyone at $2 USDC per pass, limited to two mints per wallet. It
++              opens 48 hours after the whitelist mint begins, and remains open until the Common supply cap
++              is fully minted.
++            </p>
++          </Section>
++
++          <Section n={6} title="Progression System">
++            <p>
++              Passes level up by spending LD Points. Points are earned through activity on the LitVM
++              testnet, including swaps, liquidity provision, staking, and daily check-ins, and are claimed
++              onto Base Mainnet through a secure signed-voucher bridge between the two chains.
++            </p>
++            <p>
++              <strong>Leveling cost.</strong> Tier 1→2 costs 500 LD Points; each subsequent level costs 200
++              LD Points more than the last, up to a rarity&apos;s maximum tier (500, 700, 900, 1100, 1300,
++              1500, 1700, 1900 for Common Tiers 2 through 9).
++            </p>
++            <p>
++              <strong>Promotion.</strong> Advancing from one rarity to the next, Common to Rare, Rare to
++              Epic, and Epic to Legend, requires a pass to reach its rarity&apos;s maximum tier and then
++              succeed in on-chain gameplay challenges. Gameplay has not shipped yet, and promotion is
++              disabled on-chain until it does — Common Tier 9 is the current ceiling. Promotion is
++              intentionally not available through points alone, so that rarity is earned through active
++              participation rather than purchased outright.
++            </p>
++          </Section>
++
++          <Section n={7} title="Repair Mechanic">
++            <p>
++              A pass that loses a gameplay challenge becomes damaged, and must be repaired before it can
++              be used in further challenges or leveled up. Repair carries a flat cost in USDC plus points,
++              identical across every rarity and tier.
++            </p>
++          </Section>
++
++          <Section n={8} title="Holder Utility">
++            <p>
++              <strong>Rare and above:</strong> priority access to partnership opportunities and community
++              giveaways.
++            </p>
++            <p>
++              <strong>Epic and above:</strong> all Rare benefits, plus an allocation in the future $LITDEX
++              token airdrop, plus a 10% weekly share of protocol repair-fee revenue, split among all Epic
++              holders.
++            </p>
++            <p>
++              <strong>Legend:</strong> all Epic benefits, plus a larger airdrop allocation, plus a 20%
++              weekly share of protocol repair-fee revenue, split among a maximum of 50 Legend holders,
++              making it one of the scarcest and most rewarded tiers in the collection.
++            </p>
++          </Section>
++
++          <Section n={9} title="Provenance">
++            <p>
++              Every pass carries a unique on-chain identifier and a fully traceable history. Anyone can
++              verify a pass&apos;s complete lifecycle, its original mint date, every level-up, every rarity
++              change, and every transfer, directly on-chain, with no dependence on off-chain or
++              centralized records.
++            </p>
++          </Section>
++
++          <Section n={10} title="Transparency">
++            <p>
++              Both core contracts, LitdexNFT and BasePoints, are open source and independently verified on
++              Basescan and Sourcify. This allows any holder, or prospective holder, to audit the exact
++              rules governing supply, minting, leveling, promotion, and revenue distribution before
++              committing capital.
++            </p>
++          </Section>
++
++          <Section n={11} title="Roadmap">
++            <p>
++              The immediate priority following mainnet launch is the release of on-chain gameplay, which
++              will unlock the promotion path between rarities. Beyond that, LitDEX will continue deepening
++              the integration between the LitVM testnet and Base Mainnet, and expand long-term utility for
++              holders as the ecosystem grows.
++            </p>
++            <p>
++              Genesis Champions is the first step in bringing the LitDEX community fully on-chain on Base.
++              Further updates on gameplay, partnerships, and the $LITDEX token will be shared through
++              official LitDEX channels.
++            </p>
++          </Section>
++        </div>
++
++        <div className="mt-10 flex flex-wrap gap-3">
++          <button
++            onClick={() => setPage("roadmap")}
++            className="min-h-12 px-8 py-3 rounded-lg bg-brand-text-primary text-brand-bg font-mono font-bold text-sm cursor-pointer touch-manipulation select-none active:scale-[0.98]"
++          >
++            View roadmap
++          </button>
++          <button
++            onClick={() => setPage("nfts")}
++            className="min-h-12 px-8 py-3 rounded-lg border border-brand-border text-brand-text-primary font-mono font-bold text-sm cursor-pointer touch-manipulation select-none active:scale-[0.98]"
++          >
++            Back to mint
++          </button>
++        </div>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/docs/DocsPage.tsx b/src/docs/DocsPage.tsx
+new file mode 100644
+index 0000000..176ee7a
+--- /dev/null
++++ b/src/docs/DocsPage.tsx
+@@ -0,0 +1,100 @@
++import { useMemo, useState } from "react";
++import { Menu, X } from "lucide-react";
++import { marked } from "marked";
++import { DEFAULT_DOC_SLUG, DOC_INDEX, DOC_SECTIONS } from "./manifest";
++
++/**
++ * Docs used to live only at the separate docs.litdex.test-hub.xyz (VitePress)
++ * deployment. This renders the same markdown content in-app at /docs, styled
++ * with LitDEX's own theme, so there's a single site instead of two.
++ */
++export default function DocsPage() {
++  const [slug, setSlug] = useState(DEFAULT_DOC_SLUG);
++  const [mobileNavOpen, setMobileNavOpen] = useState(false);
++  const doc = DOC_INDEX[slug] ?? DOC_INDEX[DEFAULT_DOC_SLUG];
++
++  const html = useMemo(() => {
++    try {
++      return marked.parse(doc.content, { async: false }) as string;
++    } catch {
++      return "<p>Could not render this page.</p>";
++    }
++  }, [doc.content]);
++
++  const go = (next: string) => {
++    setSlug(next);
++    setMobileNavOpen(false);
++    window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
++  };
++
++  const Nav = () => (
++    <nav className="space-y-6">
++      {DOC_SECTIONS.map((section) => (
++        <div key={section.title}>
++          <p className="px-3 font-mono text-[10px] font-bold uppercase tracking-widest text-brand-text-muted">
++            {section.title}
++          </p>
++          <div className="mt-2 flex flex-col">
++            {section.items.map((item) => (
++              <button
++                key={item.slug}
++                onClick={() => go(item.slug)}
++                className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
++                  item.slug === doc.slug
++                    ? "bg-brand-surface-2 font-semibold text-brand-text-primary"
++                    : "text-brand-text-muted hover:bg-brand-surface-2 hover:text-brand-text-primary"
++                }`}
++              >
++                {item.title}
++              </button>
++            ))}
++          </div>
++        </div>
++      ))}
++    </nav>
++  );
++
++  return (
++    <div className="min-h-[calc(100vh-80px)] px-4 py-8 md:px-8 md:py-12">
++      <div className="mx-auto flex w-full max-w-[1400px] gap-10">
++        {/* Desktop sidebar */}
++        <aside className="hidden w-64 shrink-0 lg:block">
++          <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-10 pr-2">
++            <Nav />
++          </div>
++        </aside>
++
++        {/* Mobile nav toggle */}
++        <button
++          onClick={() => setMobileNavOpen(true)}
++          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full border border-brand-border bg-brand-surface px-4 py-3 text-sm font-semibold text-brand-text-primary shadow-lg lg:hidden"
++        >
++          <Menu size={16} /> Docs menu
++        </button>
++        {mobileNavOpen && (
++          <div className="fixed inset-0 z-50 flex lg:hidden">
++            <div className="absolute inset-0 bg-black/70" onClick={() => setMobileNavOpen(false)} />
++            <div className="relative ml-auto flex h-full w-80 max-w-[85vw] flex-col overflow-y-auto border-l border-brand-border bg-brand-bg p-5">
++              <button
++                onClick={() => setMobileNavOpen(false)}
++                className="mb-4 ml-auto flex items-center gap-1 text-sm text-brand-text-muted"
++              >
++                <X size={16} /> Close
++              </button>
++              <Nav />
++            </div>
++          </div>
++        )}
++
++        {/* Content */}
++        <main className="min-w-0 flex-1 rounded-[8px] border border-brand-border bg-brand-surface px-6 py-8 md:px-10 md:py-10">
++          <div
++            className="docs-markdown"
++            // Content is authored in this repo (docs/*.md), not user-supplied.
++            dangerouslySetInnerHTML={{ __html: html }}
++          />
++        </main>
++      </div>
++    </div>
++  );
++}
+diff --git a/src/docs/manifest.ts b/src/docs/manifest.ts
+new file mode 100644
+index 0000000..7b78010
+--- /dev/null
++++ b/src/docs/manifest.ts
+@@ -0,0 +1,178 @@
++/**
++ * In-app documentation: pulls the same markdown files that used to only
++ * live on the separate docs.litdex.test-hub.xyz (VitePress) deployment,
++ * so /docs on the main site is the single source going forward.
++ *
++ * Vite's `?raw` suffix imports each file's contents as a plain string at
++ * build time — no runtime fetch, no separate deploy.
++ */
++
++// Introduction
++import indexMd from "../../docs/index.md?raw";
++import gettingStartedIndex from "../../docs/getting-started/index.md?raw";
++import gettingStartedWallet from "../../docs/getting-started/wallet.md?raw";
++import gettingStartedFaucet from "../../docs/getting-started/faucet.md?raw";
++import gettingStartedLitName from "../../docs/getting-started/lit-name.md?raw";
++
++// Trading
++import swapIndex from "../../docs/swap/index.md?raw";
++import swapBridge from "../../docs/swap/bridge.md?raw";
++
++// Liquidity
++import poolIndex from "../../docs/pool/index.md?raw";
++import poolAdd from "../../docs/pool/add.md?raw";
++import poolRemove from "../../docs/pool/remove.md?raw";
++
++// Deploy
++import deployIndex from "../../docs/deploy/index.md?raw";
++import deployToken from "../../docs/deploy/token.md?raw";
++import deployNft from "../../docs/deploy/nft.md?raw";
++import deployStaking from "../../docs/deploy/staking.md?raw";
++import deployVesting from "../../docs/deploy/vesting.md?raw";
++
++// Hub
++import hubIndex from "../../docs/hub/index.md?raw";
++import hubPrivate from "../../docs/hub/private.md?raw";
++import hubGlobal from "../../docs/hub/global.md?raw";
++import hubMarket from "../../docs/hub/market.md?raw";
++import hubLitDomain from "../../docs/hub/lit-domain.md?raw";
++import hubProfile from "../../docs/hub/profile.md?raw";
++
++// Points System
++import pointsIndex from "../../docs/points/index.md?raw";
++import pointsCheckIn from "../../docs/points/check-in.md?raw";
++import pointsCaps from "../../docs/points/caps.md?raw";
++import pointsLeaderboard from "../../docs/points/leaderboard.md?raw";
++
++// NFTs
++import nftsIndex from "../../docs/nfts/index.md?raw";
++import nftsTiers from "../../docs/nfts/tiers.md?raw";
++import nftsMintClaim from "../../docs/nfts/mint-claim.md?raw";
++
++// Messenger
++import messengerIndex from "../../docs/messenger/index.md?raw";
++import messengerOnChain from "../../docs/messenger/on-chain.md?raw";
++
++// Socials
++import socialsIndex from "../../docs/socials/index.md?raw";
++
++// Games
++import gamesIndex from "../../docs/games/index.md?raw";
++import gamesMathSlash from "../../docs/games/math-slash.md?raw";
++import gamesCasino from "../../docs/games/casino.md?raw";
++import gamesProvablyFair from "../../docs/games/provably-fair.md?raw";
++
++// Faucet
++import faucetIndex from "../../docs/faucet/index.md?raw";
++
++// Reference
++import faq from "../../docs/faq.md?raw";
++import troubleshooting from "../../docs/troubleshooting.md?raw";
++import referenceContracts from "../../docs/reference/contracts.md?raw";
++
++export type DocEntry = { slug: string; title: string; content: string };
++export type DocSection = { title: string; items: DocEntry[] };
++
++export const DOC_SECTIONS: DocSection[] = [
++  {
++    title: "Introduction",
++    items: [
++      { slug: "", title: "What is LitDEX", content: indexMd },
++      { slug: "getting-started", title: "Getting Started", content: gettingStartedIndex },
++      { slug: "getting-started/wallet", title: "Connect a Wallet", content: gettingStartedWallet },
++      { slug: "getting-started/faucet", title: "Claim Faucet", content: gettingStartedFaucet },
++      { slug: "getting-started/lit-name", title: "Register a .lit Name", content: gettingStartedLitName },
++    ],
++  },
++  {
++    title: "Trading",
++    items: [
++      { slug: "swap", title: "Swap", content: swapIndex },
++      { slug: "swap/bridge", title: "Cross-Chain Bridge", content: swapBridge },
++    ],
++  },
++  {
++    title: "Liquidity",
++    items: [
++      { slug: "pool", title: "Pool Overview", content: poolIndex },
++      { slug: "pool/add", title: "Add Liquidity", content: poolAdd },
++      { slug: "pool/remove", title: "Remove Liquidity", content: poolRemove },
++    ],
++  },
++  {
++    title: "Deploy",
++    items: [
++      { slug: "deploy", title: "Deploy Overview", content: deployIndex },
++      { slug: "deploy/token", title: "Deploy a Token", content: deployToken },
++      { slug: "deploy/nft", title: "Deploy an NFT Collection", content: deployNft },
++      { slug: "deploy/staking", title: "Deploy Staking", content: deployStaking },
++      { slug: "deploy/vesting", title: "Deploy Vesting", content: deployVesting },
++    ],
++  },
++  {
++    title: "Hub",
++    items: [
++      { slug: "hub", title: "Hub Overview", content: hubIndex },
++      { slug: "hub/private", title: "Private Chat", content: hubPrivate },
++      { slug: "hub/global", title: "Global Feed", content: hubGlobal },
++      { slug: "hub/market", title: ".lit Market", content: hubMarket },
++      { slug: "hub/lit-domain", title: ".lit Domain Registration", content: hubLitDomain },
++      { slug: "hub/profile", title: "Profile", content: hubProfile },
++    ],
++  },
++  {
++    title: "Points System",
++    items: [
++      { slug: "points", title: "How Points Work", content: pointsIndex },
++      { slug: "points/check-in", title: "Daily Check-in", content: pointsCheckIn },
++      { slug: "points/caps", title: "Daily Caps", content: pointsCaps },
++      { slug: "points/leaderboard", title: "Leaderboard", content: pointsLeaderboard },
++    ],
++  },
++  {
++    title: "NFTs — Genesis Champions",
++    items: [
++      { slug: "nfts", title: "NFT Overview", content: nftsIndex },
++      { slug: "nfts/tiers", title: "Tiers & Rewards", content: nftsTiers },
++      { slug: "nfts/mint-claim", title: "Mint & Claim", content: nftsMintClaim },
++    ],
++  },
++  {
++    title: "Messenger",
++    items: [
++      { slug: "messenger", title: "Messenger Overview", content: messengerIndex },
++      { slug: "messenger/on-chain", title: "On-chain Public + Direct", content: messengerOnChain },
++    ],
++  },
++  {
++    title: "Socials & Quests",
++    items: [{ slug: "socials", title: "Socials Overview", content: socialsIndex }],
++  },
++  {
++    title: "Games",
++    items: [
++      { slug: "games", title: "Games Overview", content: gamesIndex },
++      { slug: "games/math-slash", title: "Math Slash", content: gamesMathSlash },
++      { slug: "games/casino", title: "Casino Games", content: gamesCasino },
++      { slug: "games/provably-fair", title: "Provably Fair", content: gamesProvablyFair },
++    ],
++  },
++  {
++    title: "Faucet",
++    items: [{ slug: "faucet", title: "Faucet Overview", content: faucetIndex }],
++  },
++  {
++    title: "Reference",
++    items: [
++      { slug: "faq", title: "FAQ", content: faq },
++      { slug: "troubleshooting", title: "Troubleshooting", content: troubleshooting },
++      { slug: "reference/contracts", title: "Contracts", content: referenceContracts },
++    ],
++  },
++];
++
++export const DOC_INDEX: Record<string, DocEntry> = Object.fromEntries(
++  DOC_SECTIONS.flatMap((s) => s.items).map((d) => [d.slug, d]),
++);
++
++export const DEFAULT_DOC_SLUG = "";
+diff --git a/src/index.css b/src/index.css
+index 78143a8..2f27a72 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -719,3 +719,28 @@ body.hide-nav .litdex-mobile-hamburger { display: none !important; }
+   .nft-action-button { transition: none; }
+   .nft-action-button:hover { transform: none; }
+ }
++
++/* ---------- In-app docs markdown rendering (/docs) ---------- */
++.docs-markdown { color: var(--color-brand-text-primary); font-size: 0.95rem; line-height: 1.75; }
++.docs-markdown h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 1rem; }
++.docs-markdown h2 { font-size: 1.4rem; font-weight: 700; margin: 2.25rem 0 0.9rem; padding-top: 1.25rem; border-top: 1px solid var(--color-brand-border); }
++.docs-markdown h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
++.docs-markdown h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.6rem; }
++.docs-markdown p { margin: 0.9rem 0; color: var(--color-brand-text-muted); }
++.docs-markdown strong { color: var(--color-brand-text-primary); font-weight: 700; }
++.docs-markdown a { color: var(--color-brand-control); text-decoration: underline; text-underline-offset: 2px; }
++.docs-markdown ul, .docs-markdown ol { margin: 0.9rem 0; padding-left: 1.4rem; color: var(--color-brand-text-muted); }
++.docs-markdown ul { list-style: disc; }
++.docs-markdown ol { list-style: decimal; }
++.docs-markdown li { margin: 0.35rem 0; }
++.docs-markdown li::marker { color: var(--color-brand-text-muted); }
++.docs-markdown blockquote { margin: 1.25rem 0; padding: 0.1rem 1.1rem; border-left: 3px solid var(--color-brand-control); background: var(--color-brand-surface-2); border-radius: 0 8px 8px 0; color: var(--color-brand-text-muted); }
++.docs-markdown blockquote p { margin: 0.7rem 0; }
++.docs-markdown code { font-family: ui-monospace, "JetBrains Mono", monospace; font-size: 0.85em; background: var(--color-brand-surface-2); border: 1px solid var(--color-brand-border); border-radius: 4px; padding: 0.15em 0.4em; color: var(--color-brand-text-primary); }
++.docs-markdown pre { margin: 1.1rem 0; padding: 1rem 1.1rem; background: var(--color-brand-surface-2); border: 1px solid var(--color-brand-border); border-radius: 8px; overflow-x: auto; }
++.docs-markdown pre code { background: none; border: none; padding: 0; }
++.docs-markdown table { width: 100%; margin: 1.1rem 0; border-collapse: collapse; font-size: 0.88em; display: block; overflow-x: auto; }
++.docs-markdown th, .docs-markdown td { border: 1px solid var(--color-brand-border); padding: 0.55rem 0.8rem; text-align: left; }
++.docs-markdown th { background: var(--color-brand-surface-2); color: var(--color-brand-text-primary); font-weight: 700; white-space: nowrap; }
++.docs-markdown td { color: var(--color-brand-text-muted); }
++.docs-markdown hr { border: none; border-top: 1px solid var(--color-brand-border); margin: 2rem 0; }

@@ -53,10 +53,15 @@ const NFT_SHOWCASE_VIDEO_MP4 = '/media/boardpass-desktopview.mp4';
 const NFT_SHOWCASE_VIDEO_WEBM = '/media/boardpass-desktopview.webm';
 
 // --- Types ---
-type PageID = 'swap' | 'pool' | 'deploy' | 'points' | 'checkin' | 'nfts' | 'messenger' | 'quests' | 'games' | 'faucet' | 'hub' | 'chatui';
+export type PageID = 'swap' | 'pool' | 'deploy' | 'points' | 'checkin' | 'nfts' | 'messenger' | 'quests' | 'games' | 'faucet' | 'hub' | 'chatui' | 'whitepaper' | 'roadmap' | 'about' | 'faq' | 'docs';
 import HubPage from './components/HubPage';
 import ChatUIPage from './components/ChatUIPage';
 import { ChampionsDashboard } from './champions/ChampionsDashboard';
+import WhitepaperPage from './components/legal/WhitepaperPage';
+import RoadmapPage from './components/legal/RoadmapPage';
+import AboutPage from './components/legal/AboutPage';
+import FaqPage from './components/legal/FaqPage';
+import DocsPage from './docs/DocsPage';
 
 interface NavItemProps {
   icon: any;
@@ -7441,6 +7446,11 @@ export default function App() {
     faucet: '/faucet',
     hub: '/hub',
     chatui: '/hub',
+    whitepaper: '/whitepaper',
+    roadmap: '/roadmap',
+    about: '/about',
+    faq: '/faq',
+    docs: '/docs',
   };
   const pathToPage = (path: string): PageID => {
     const seg = path.split('/').filter(Boolean)[0] || '';
@@ -7459,6 +7469,11 @@ export default function App() {
       case 'faucet': return 'faucet';
       case 'hub':
       case 'chatui': return 'chatui';
+      case 'whitepaper': return 'whitepaper';
+      case 'roadmap': return 'roadmap';
+      case 'about': return 'about';
+      case 'faq': return 'faq';
+      case 'docs': return 'docs';
       default: return 'swap';
     }
   };
@@ -7540,6 +7555,11 @@ export default function App() {
       case 'faucet': return <FaucetPage />;
       case 'hub': return <HubPage />;
       case 'chatui': return <ChatUIPage />;
+      case 'whitepaper': return <WhitepaperPage setPage={setActivePage} />;
+      case 'roadmap': return <RoadmapPage setPage={setActivePage} />;
+      case 'about': return <AboutPage setPage={setActivePage} />;
+      case 'faq': return <FaqPage setPage={setActivePage} />;
+      case 'docs': return <DocsPage />;
       default: return <SwapPage />;
     }
   };
@@ -7732,10 +7752,14 @@ export default function App() {
             </div>
             <span className="text-brand-text-muted text-xs font-mono">LitDEX Testnet</span>
           </div>
-          <div className="flex gap-8 text-xs uppercase font-mono tracking-widest text-brand-text-muted">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs uppercase font-mono tracking-widest text-brand-text-muted">
+            <button onClick={() => setActivePage('whitepaper')} className="hover:text-white transition-colors">Whitepaper</button>
+            <button onClick={() => setActivePage('roadmap')} className="hover:text-white transition-colors">Roadmap</button>
+            <button onClick={() => setActivePage('about')} className="hover:text-white transition-colors">About Us</button>
+            <button onClick={() => setActivePage('faq')} className="hover:text-white transition-colors">FAQ</button>
+            <button onClick={() => setActivePage('docs')} className="hover:text-white transition-colors">Docs</button>
             <a href="https://x.com/LitDEXApp" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter (X)</a>
             <a href="https://t.me/litdex_discussion" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
-            <a href="https://docs.litdex.test-hub.xyz" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Docs</a>
           </div>
         </div>
       </footer>
